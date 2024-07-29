@@ -1,10 +1,24 @@
 import {Button, Grid, Input, Typography} from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const UserForm = prps => {
+const UserForm = ({ addUser,updateUser, submitted, data, isEdit }) => {
 
     const [id, setId] = useState(0)
     const [name, setName] = useState('')
+
+    useEffect(() => {
+        if (!submitted) {
+            setId(0);
+            setName('');
+        }
+    }, [submitted]);
+
+    useEffect(() =>{
+        if (data?.id && data !==0) {
+            setId(data.id);
+            setName(data.name);
+        }
+    }, [data])
 
     return (
         <Grid
@@ -75,7 +89,13 @@ const UserForm = prps => {
                 }
                 }}
                 
-                >Submit</Button>
+                onClick={() => isEdit? updateUser({id,name}): addUser({id, name})}
+
+                >
+                    {
+                        isEdit ? 'Update' : 'Add'
+                    }
+                </Button>
 
         </Grid>
     );
